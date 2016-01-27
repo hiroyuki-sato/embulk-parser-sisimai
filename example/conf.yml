@@ -1,0 +1,7 @@
+in:
+  type: file
+  path_prefix: mail/make
+  parser:
+    type: sisimai_analyzer
+out:
+  type: stdout
