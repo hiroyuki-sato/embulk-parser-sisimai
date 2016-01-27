@@ -1,3 +1,7 @@
+require 'sisimai'
+require 'sisimai/message'
+require 'sisimai/data'
+
 module Embulk
   module Parser
 
@@ -7,15 +11,11 @@ module Embulk
       def self.transaction(config, &control)
         # configuration code:
         task = {
-          "option1" => config.param("option1", :integer),                     # integer, required
-          "option2" => config.param("option2", :string, default: "myvalue"),  # string, optional
-          "option3" => config.param("option3", :string, default: nil),        # string, optional
+          "format" => config.param("format", :string, default: "json")
         }
 
         columns = [
-          Column.new(0, "example", :string),
-          Column.new(1, "column", :long),
-          Column.new(2, "name", :double),
+          Column.new(0, "result", :json),
         ]
 
         yield(task, columns)
@@ -23,18 +23,14 @@ module Embulk
 
       def init
         # initialization code:
-        @option1 = task["option1"]
-        @option2 = task["option2"]
-        @option3 = task["option3"]
+#        @format = task["format"]
       end
 
       def run(file_input)
         while file = file_input.next_file
-          file.each do |buffer|
-            # parsering code
-            record = ["col1", 2, 3.0]
-            page_builder.add(record)
-          end
+          mesg = Sisimai::Message.new( data: file.read )
+          data = Sisimai::Data.make( data: mesg )
+          page_builder.add([ data[0].dump ])
         end
         page_builder.finish
       end
