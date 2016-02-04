@@ -12,7 +12,7 @@ module Embulk
       def self.transaction(config, &control)
         # configuration code:
         task = {
-          "format" => config.param("format", :string, default: "json")
+          "format" => config.param("format", :string, default: "column")
         }
 
         format = task["format"]
@@ -60,6 +60,10 @@ module Embulk
         while file = file_input.next_file
           mesg = Sisimai::Message.new( data: file.read )
           datas = Sisimai::Data.make( data: mesg )
+if datas.nil? 
+Embulk.logger.info "no bound mail."
+next
+end
           datas.each do |data|
             case @format
             when "json"
