@@ -1,7 +1,8 @@
 in:
   type: file
-  path_prefix: mail/make
+  path_prefix: example/mail/make
   parser:
     type: sisimai_analyzer
+    format: json
 out:
   type: stdout
