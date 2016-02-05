@@ -10,7 +10,6 @@ module Embulk
       Plugin.register_parser("sisimai_analyzer", self)
 
       def self.transaction(config, &control)
-        # configuration code:
         task = {
           "format" => config.param("format", :string, default: "column")
         }
@@ -61,10 +60,10 @@ module Embulk
         while file = file_input.next_file
           mesg = Sisimai::Message.new( data: file.read )
           datas = Sisimai::Data.make( data: mesg )
-if datas.nil? 
-Embulk.logger.info "no bound mail."
-next
-end
+          if datas.nil?
+            Embulk.logger.info "This file does not contaion bounce mail. skip."
+            next
+          end
           datas.each do |data|
             case @format
             when "json"
@@ -82,7 +81,7 @@ end
       end
       private
       def make_column_array(data)
-        result = [
+        [
           data.action,
           data.addresser.to_json,
           data.alias,
@@ -109,6 +108,5 @@ end
         ]
       end
     end
-
   end
 end
