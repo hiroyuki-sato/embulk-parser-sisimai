@@ -10,6 +10,7 @@ Embulk parser plugin for Sisimai bounce mail analyzer.
 ## Configuration
 
 - **format**: output format (`column` or `json`, default: `column`)
+- **extract_mail_address**: extract mail_address into user, host and verp. This is column format only.
 
 ## Example
 
@@ -24,6 +25,8 @@ in:
 ```
 
 Example output
+
+``extract_mail_address``: ``false`` (default)
 
 ```
         action (   string) : failed
@@ -40,6 +43,7 @@ diagnostictype (   string) : SMTP
         reason (   string) : hostunknown
      recipient (   string) : domain-does-not-exist@example.gov
      replycode (   string) : 550
+         rhost (   string) : example.gov
   senderdomain (   string) : example.jp
      smtpagent (   string) : Sendmail
    smtpcommand (   string) : 
@@ -48,6 +52,40 @@ diagnostictype (   string) : SMTP
      timestamp (timestamp) : 2008-09-18 08:54:04 UTC
 timezoneoffset (   string) : +0900
          token (   string) : d059e55e074333fe59001b1d30d27da85a1a9c1d
+```
+
+``extract_mail_address``: ``true``
+
+```
+        action (   string) : failed
+     addresser (   string) : user1@example.jp
+         alias (   string) : 
+deliverystatus (   string) : 5.1.2
+   destination (   string) : example.gov
+diagnosticcode (   string) : 550 Host unknown
+diagnostictype (   string) : SMTP
+  feedbacktype (   string) : 
+         lhost (   string) : 192.0.2.97
+        listid (   string) : 
+     messageid (   string) : AA406E7E18714AB2927DAACC24B47C4A@USER-PC97
+        reason (   string) : hostunknown
+     recipient (   string) : domain-does-not-exist@example.gov
+     replycode (   string) : 550
+         rhost (   string) : example.gov
+  senderdomain (   string) : example.jp
+     smtpagent (   string) : Sendmail
+   smtpcommand (   string) : 
+    softbounce (     long) : 0
+       subject (   string) : MULTIBYTE CHARACTERS HAVE BEEN REMOVED
+     timestamp (timestamp) : 2008-09-18 08:54:04 UTC
+timezoneoffset (   string) : +0900
+         token (   string) : d059e55e074333fe59001b1d30d27da85a1a9c1d
+addresser_user (   string) : user1
+addresser_host (   string) : example.jp
+addresser_vrep (   string) : 
+recipient_user (   string) : domain-does-not-exist
+recipient_host (   string) : example.gov
+recipient_vrep (   string) : 
 ```
 
 

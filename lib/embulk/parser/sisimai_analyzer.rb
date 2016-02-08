@@ -11,7 +11,8 @@ module Embulk
 
       def self.transaction(config, &control)
         task = {
-          "format" => config.param("format", :string, default: "column")
+          "format" => config.param("format", :string, default: "column"),
+          "extract_mail_address" => config.param("extract_mail_address", :bool, default: false)
         }
 
         format = task["format"]
@@ -19,7 +20,7 @@ module Embulk
         when "json"
           [ Column.new(0, "result", :json) ]
         when "column"
-          [
+          c = [
             Column.new(0, "action", :string),
             Column.new(1, "addresser",:string),
             Column.new(2, "alias", :string),
@@ -44,6 +45,17 @@ module Embulk
             Column.new(21, "timezoneoffset", :string),
             Column.new(22, "token", :string),
           ]
+          if task['extract_mail_address'] == true
+            c += [
+              Column.new(23, "addresser_user", :string),
+              Column.new(24, "addresser_host", :string),
+              Column.new(25, "addresser_vrep", :string),
+              Column.new(26, "recipient_user", :string),
+              Column.new(27, "recipient_host", :string),
+              Column.new(28, "recipient_vrep", :string),
+            ]
+          end
+          c
         else
           raise ArgumentError,"Unkown format type: #{format}"
         end
@@ -54,6 +66,7 @@ module Embulk
       def init
         # initialization code:
         @format = task["format"]
+        @extract_mail_address = task["extract_mail_address"]
       end
 
       def run(file_input)
@@ -81,7 +94,7 @@ module Embulk
       end
       private
       def make_column_array(data)
-        [
+        row = [
           data.action,
           data.addresser.to_json,
           data.alias,
@@ -104,8 +117,19 @@ module Embulk
           data.subject,
           data.timestamp.to_time.utc,
           data.timezoneoffset,
-          data.token
+          data.token,
         ]
+        if @extract_mail_address
+          row += [
+            data.addresser.user,
+            data.addresser.host,
+            data.addresser.verp,
+            data.recipient.user,
+            data.recipient.host,
+            data.recipient.verp,
+          ]
+        end
+        row
       end
     end
   end
