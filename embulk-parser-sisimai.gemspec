@@ -1,13 +1,13 @@
 
 Gem::Specification.new do |spec|
-  spec.name          = "embulk-parser-sisimai_analyzer"
+  spec.name          = "embulk-parser-sisimai"
   spec.version       = "0.1.0"
   spec.authors       = ["Hiroyuki Sato"]
   spec.summary       = "Sisimai Analyzer parser plugin for Embulk"
   spec.description   = "Parses Sisimai Analyzer files read by other file input plugins."
   spec.email         = ["hsato@archsystem.com"]
   spec.licenses      = ["MIT"]
-  # TODO set this: spec.homepage      = "https://github.com/hsato/embulk-parser-sisimai_analyzer"
+  # TODO set this: spec.homepage      = "https://github.com/hsato/embulk-parser-sisimai"
 
   spec.files         = `git ls-files`.split("\n") + Dir["classpath/*.jar"]
   spec.test_files    = spec.files.grep(%r{^(test|spec)/})

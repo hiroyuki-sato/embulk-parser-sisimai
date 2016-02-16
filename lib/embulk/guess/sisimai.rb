@@ -2,15 +2,15 @@ module Embulk
   module Guess
 
     # TODO implement guess plugin to make this command work:
-    #      $ embulk guess -g "sisimai_analyzer" partial-config.yml
+    #      $ embulk guess -g "sisimai" partial-config.yml
     #
     #      Depending on the file format the plugin uses, you can use choose
     #      one of binary guess (GuessPlugin), text guess (TextGuessPlugin),
     #      or line guess (LineGuessPlugin).
 
-    #require "embulk/parser/sisimai_analyzer.rb"
+    #require "embulk/parser/sisimai.rb"
 
-    #class SisimaiAnalyzer < GuessPlugin
+    #class Sisimai < GuessPlugin
     #  Plugin.register_guess("sisimai_analyzer", self)
     #
     #  def guess(config, sample_buffer)
@@ -25,7 +25,7 @@ module Embulk
     #  end
     #end
 
-    #class SisimaiAnalyzer < TextGuessPlugin
+    #class Sisimai < TextGuessPlugin
     #  Plugin.register_guess("sisimai_analyzer", self)
     #
     #  def guess_text(config, sample_text)
@@ -41,7 +41,7 @@ module Embulk
     #  end
     #end
 
-    #class SisimaiAnalyzer < LineGuessPlugin
+    #class Sisimai < LineGuessPlugin
     #  Plugin.register_guess("sisimai_analyzer", self)
     #
     #  def guess_lines(config, sample_lines)
