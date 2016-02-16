@@ -7,7 +7,7 @@ Gem::Specification.new do |spec|
   spec.description   = "Parses Sisimai Analyzer files read by other file input plugins."
   spec.email         = ["hsato@archsystem.com"]
   spec.licenses      = ["MIT"]
-  # TODO set this: spec.homepage      = "https://github.com/hsato/embulk-parser-sisimai"
+  spec.homepage      = "https://github.com/hiroyuki-sato/embulk-parser-sisimai"
 
   spec.files         = `git ls-files`.split("\n") + Dir["classpath/*.jar"]
   spec.test_files    = spec.files.grep(%r{^(test|spec)/})
