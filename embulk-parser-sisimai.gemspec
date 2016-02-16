@@ -5,7 +5,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ["Hiroyuki Sato"]
   spec.summary       = "Sisimai Analyzer parser plugin for Embulk"
   spec.description   = "Parses Sisimai Analyzer files read by other file input plugins."
-  spec.email         = ["hsato@archsystem.com"]
+  spec.email         = ["hiroysato@gmail.com"]
   spec.licenses      = ["MIT"]
   spec.homepage      = "https://github.com/hiroyuki-sato/embulk-parser-sisimai"
 
