@@ -1,7 +1,6 @@
 require 'sisimai'
 require 'sisimai/message'
 require 'sisimai/data'
-require 'pp'
 
 module Embulk
   module Parser
