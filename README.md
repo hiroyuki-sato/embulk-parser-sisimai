@@ -1,4 +1,4 @@
-# Sisimai Analyzer parser plugin for Embulk
+# Sisimai parser plugin for Embulk
 
 Embulk parser plugin for Sisimai bounce mail analyzer. 
 
@@ -20,7 +20,7 @@ Embulk parser plugin for Sisimai bounce mail analyzer.
 in:
   type: any file input plugin type
   parser:
-    type: sisimai_analyzer
+    type: sisimai
     format: column
 ```
 
@@ -95,7 +95,7 @@ recipient_vrep (   string) :
 in:
   type: any file input plugin type
   parser:
-    type: sisimai_analyzer
+    type: sisimai
     format: json
 ```
 
@@ -135,7 +135,7 @@ result (json) : { "token": "d059e55e074333fe59001b1d30d27da85a1a9c1d", "lhost": 
 ## Install
 
 ```
-$ embulk gem install embulk-parser-sisimai_analyzer
+$ embulk gem install embulk-parser-sisimai
 ```
 
 ## Build

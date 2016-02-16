@@ -6,8 +6,8 @@ require 'pp'
 module Embulk
   module Parser
 
-    class SisimaiAnalyzer < ParserPlugin
-      Plugin.register_parser("sisimai_analyzer", self)
+    class Sisimai < ParserPlugin
+      Plugin.register_parser("sisimai", self)
 
       def self.transaction(config, &control)
         task = {
@@ -71,8 +71,8 @@ module Embulk
 
       def run(file_input)
         while file = file_input.next_file
-          mesg = Sisimai::Message.new( data: file.read )
-          datas = Sisimai::Data.make( data: mesg )
+          mesg = ::Sisimai::Message.new( data: file.read )
+          datas = ::Sisimai::Data.make( data: mesg )
           if datas.nil?
             Embulk.logger.info "This file does not contaion bounce mail. skip."
             next
