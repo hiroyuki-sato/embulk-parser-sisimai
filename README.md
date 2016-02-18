@@ -1,6 +1,7 @@
 # Sisimai parser plugin for Embulk
 
-Embulk parser plugin for Sisimai bounce mail analyzer. 
+Embulk parser plugin for [Sisimai](https://github.com/sisimai/rb-Sisimai)
+bounce mail analyzing interface(A successor to bounceHammer).
 
 ## Overview
 
