@@ -10,8 +10,10 @@ Embulk parser plugin for Sisimai bounce mail analyzer.
 ## Configuration
 
 - **format**: output format (`column` or `json`, default: `column`)
-- **extract_mail_address**: extract mail_address into user, host and verp. This is column format only.
+- **extract_mail_address**: extract mail_address into user, host and verp parts(bool, default: false).
+- **include_delivered**: include delivered mail Status: 2.X.Y, (boolean, default: `false`)
 
+The ``extract_mail_address`` parameter is column format mode only.
 ## Example
 
 ## column format

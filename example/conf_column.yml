@@ -4,5 +4,6 @@ in:
   parser:
     type: sisimai
     format: column
+#    include_delivered: true
 out:
   type: stdout
