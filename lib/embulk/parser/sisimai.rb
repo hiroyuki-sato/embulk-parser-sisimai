@@ -11,7 +11,8 @@ module Embulk
       def self.transaction(config, &control)
         task = {
           "format" => config.param("format", :string, default: "column"),
-          "extract_mail_address" => config.param("extract_mail_address", :bool, default: false)
+          "extract_mail_address" => config.param("extract_mail_address", :bool, default: false),
+          "include_delivered" => config.param("include_delivered", :bool, default: false)
         }
 
         format = task["format"]
@@ -65,13 +66,15 @@ module Embulk
       def init
         # initialization code:
         @format = task["format"]
+        @inc_delivered = task["include_delivered"]
         @extract_mail_address = task["extract_mail_address"]
+        Embulk.logger.info "sisimai format: #{@format} include_delivered: #{@inc_delivered}, extract_mail_address: #{@extract_mail_address}"
       end
 
       def run(file_input)
         while file = file_input.next_file
           mesg = ::Sisimai::Message.new( data: file.read )
-          datas = ::Sisimai::Data.make( data: mesg )
+          datas = ::Sisimai::Data.make( data: mesg, delivered: @inc_delivered )
           if datas.nil?
             Embulk.logger.info "This file does not contaion bounce mail. skip."
             next
