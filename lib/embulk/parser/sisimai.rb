@@ -126,7 +126,7 @@ module Embulk
 
               page_builder.add(column_data)
             when "sisito"
-              column_data = make_sisto_array(data)
+              column_data = make_sisito_array(data)
               page_builder.add(column_data)
             else
               raise RuntimeError,"Invalid format #{@format}"
@@ -175,7 +175,7 @@ module Embulk
         row
       end
 
-      def make_sisto_array(data)
+      def make_sisito_array(data)
         #data.diagnostictype,
         #data.replycode,
         #data.token,
