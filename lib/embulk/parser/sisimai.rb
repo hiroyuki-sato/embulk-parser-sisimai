@@ -104,8 +104,14 @@ module Embulk
 
       def run(file_input)
         while file = file_input.next_file
-          mesg = ::Sisimai::Message.new( data: file.read )
-          datas = ::Sisimai::Data.make( data: mesg, delivered: @inc_delivered )
+          begin
+            src = file.read
+            mesg = ::Sisimai::Message.new( data: src )
+            datas = ::Sisimai::Data.make( data: mesg, delivered: @inc_delivered )
+          rescue
+            Embulk.logger.error "Error #{$!} #{src}"
+            raise
+          end
           if datas.nil?
             Embulk.logger.info "This file does not contaion bounce mail. skip."
             next
