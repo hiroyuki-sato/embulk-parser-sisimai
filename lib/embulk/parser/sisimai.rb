@@ -88,6 +88,10 @@ module Embulk
           raise ArgumentError,"Unkown format type: #{format}"
         end
 
+        format = task["format"]
+        inc_delivered = task["include_delivered"]
+        extract_mail_address = task["extract_mail_address"]
+        Embulk.logger.info "sisimai format: #{format} include_delivered: #{inc_delivered}, extract_mail_address: #{extract_mail_address}"
         yield(task, columns)
       end
 
@@ -96,7 +100,6 @@ module Embulk
         @format = task["format"]
         @inc_delivered = task["include_delivered"]
         @extract_mail_address = task["extract_mail_address"]
-        Embulk.logger.info "sisimai format: #{@format} include_delivered: #{@inc_delivered}, extract_mail_address: #{@extract_mail_address}"
       end
 
       def run(file_input)
