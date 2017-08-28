@@ -106,7 +106,7 @@ module Embulk
         while file = file_input.next_file
           begin
             # Sisimai expects input data is UTF-8 string.
-            src = file.read.force_encoding(Encoding::UTF_8)
+            src = file.read #.force_encoding(Encoding::UTF_8)
             mesg = ::Sisimai::Message.new( data: src )
             datas = ::Sisimai::Data.make( data: mesg, delivered: @inc_delivered )
           rescue
@@ -176,7 +176,7 @@ module Embulk
       end
 
       def make_sisito_array(data)
-        #data.diagnostictype,
+        #data.diagnosticcode,
         #data.replycode,
         #data.token,
 
@@ -200,7 +200,7 @@ module Embulk
           data.destination,
           data.senderdomain,
           data.feedbacktype,
-          data.diagnosticcode,
+          "", # data.diagnostictype,
           data.deliverystatus,
           data.timezoneoffset,
           data.addresser.to_json,
