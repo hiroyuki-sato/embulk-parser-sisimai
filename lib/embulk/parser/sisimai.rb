@@ -106,7 +106,7 @@ module Embulk
         while file = file_input.next_file
           begin
             # Sisimai expects input data is UTF-8 string.
-            src = file.read #.force_encoding(Encoding::UTF_8)
+            src = file.read.force_encoding(Encoding::UTF_8)
             mesg = ::Sisimai::Message.new( data: src )
             datas = ::Sisimai::Data.make( data: mesg, delivered: @inc_delivered )
           rescue
