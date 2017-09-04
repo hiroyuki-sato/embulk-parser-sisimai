@@ -137,7 +137,7 @@ result (json) : { "token": "d059e55e074333fe59001b1d30d27da85a1a9c1d", "lhost": 
 }
 ```
 
-### format: sisimai
+### format: sisito
 
 [sisito](https://github.com/winebarrel/sisito) is the GUI interface for libsisimai.
 The following cofiguration import bounce mails into sisito database.
