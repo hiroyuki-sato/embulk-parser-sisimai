@@ -1,7 +1,7 @@
 
 Gem::Specification.new do |spec|
   spec.name          = "embulk-parser-sisimai"
-  spec.version       = "0.1.0"
+  spec.version       = "0.1.1"
   spec.authors       = ["Hiroyuki Sato"]
   spec.summary       = "Sisimai Analyzer parser plugin for Embulk"
   spec.description   = "Parses Sisimai Analyzer files read by other file input plugins."
