@@ -10,14 +10,16 @@ bounce mail analyzing interface(A successor to bounceHammer).
 
 ## Configuration
 
-- **format**: output format (`column` or `json`, default: `column`)
+- **format**: output format (`column`,`json` or `sisito`, default: `column`)
 - **extract_mail_address**: extract mail_address into user, host and verp parts(bool, default: false).
 - **include_delivered**: include delivered mail Status: 2.X.Y, (boolean, default: `false`)
 
-The ``extract_mail_address`` parameter is column format mode only.
+The ``extract_mail_address`` parameter is `column` format mode only.
+And the `include_delivered` parameter can't use format `sisito`.
+
 ## Example
 
-## column format
+### format: column
 
 ```yaml
 in:
@@ -92,7 +94,7 @@ recipient_vrep (   string) :
 ```
 
 
-## json format
+### format: json
 
 ```yaml
 in:
@@ -134,6 +136,32 @@ result (json) : { "token": "d059e55e074333fe59001b1d30d27da85a1a9c1d", "lhost": 
   "timestamp": 1221728044
 }
 ```
+
+### format: sisito
+
+[sisito](https://github.com/winebarrel/sisito) is the GUI interface for libsisimai.
+The following cofiguration import bounce mails into sisito database.
+
+```yaml
+in:
+  path_prefix: path/to/maildir
+  type: file
+  parser:
+    type: sisimai
+    format: sisito
+out:
+  type: mysql
+  host: localhost
+  user: user
+  password: password
+  mode: replace
+  database: maillog_test
+  table: bounce_mails # Don't change. sisito use this table name
+  column_options:
+    created_at: { type: datetime }
+    updated_at: { type: datetime }
+```
+
 
 ## Install
 

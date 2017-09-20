@@ -1,6 +1,7 @@
 require 'sisimai'
 require 'sisimai/message'
 require 'sisimai/data'
+require 'digest/sha1'
 
 module Embulk
   module Parser
@@ -56,10 +57,41 @@ module Embulk
             ]
           end
           c
+        when "sisito"
+          c = [
+            Column.new(0, "timestamp", :timestamp),
+            Column.new(1, "lhost", :string),
+            Column.new(2, "rhost", :string),
+            Column.new(3, "alias", :string),
+            Column.new(4, "listid", :string),
+            Column.new(5, "reason", :string),
+            Column.new(6, "action", :string),
+            Column.new(7, "subject", :string),
+            Column.new(8, "messageid", :string),
+            Column.new(9, "smtpagent", :string),
+            Column.new(10, "softbounce", :long),
+            Column.new(11, "smtpcommand", :string),
+            Column.new(12, "destination", :string),
+            Column.new(13, "senderdomain", :string),
+            Column.new(14, "feedbacktype", :string),
+            Column.new(15, "diagnostictype", :string),
+            Column.new(16, "deliverystatus", :string),
+            Column.new(17, "timezoneoffset", :string),
+            Column.new(18, "addresser",:string),
+            Column.new(19, "recipient", :string),
+            Column.new(20, "addresseralias",:string),
+            Column.new(21, "digest",:string),
+            Column.new(22, "created_at",:timestamp),
+            Column.new(23, "updated_at",:timestamp),
+          ]
         else
           raise ArgumentError,"Unkown format type: #{format}"
         end
 
+        format = task["format"]
+        inc_delivered = task["include_delivered"]
+        extract_mail_address = task["extract_mail_address"]
+        Embulk.logger.info "sisimai format: #{format} include_delivered: #{inc_delivered}, extract_mail_address: #{extract_mail_address}"
         yield(task, columns)
       end
 
@@ -68,13 +100,19 @@ module Embulk
         @format = task["format"]
         @inc_delivered = task["include_delivered"]
         @extract_mail_address = task["extract_mail_address"]
-        Embulk.logger.info "sisimai format: #{@format} include_delivered: #{@inc_delivered}, extract_mail_address: #{@extract_mail_address}"
       end
 
       def run(file_input)
         while file = file_input.next_file
-          mesg = ::Sisimai::Message.new( data: file.read )
-          datas = ::Sisimai::Data.make( data: mesg, delivered: @inc_delivered )
+          begin
+            # Sisimai expects input data is UTF-8 string.
+            src = file.read.force_encoding(Encoding::UTF_8)
+            mesg = ::Sisimai::Message.new( data: src )
+            datas = ::Sisimai::Data.make( data: mesg, delivered: @inc_delivered )
+          rescue
+            Embulk.logger.error "Error #{$!} #{src}"
+            raise
+          end
           if datas.nil?
             Embulk.logger.info "This file does not contaion bounce mail. skip."
             next
@@ -86,6 +124,9 @@ module Embulk
             when "column"
               column_data = make_column_array(data)
 
+              page_builder.add(column_data)
+            when "sisito"
+              column_data = make_sisito_array(data)
               page_builder.add(column_data)
             else
               raise RuntimeError,"Invalid format #{@format}"
@@ -132,6 +173,43 @@ module Embulk
           ]
         end
         row
+      end
+
+      def make_sisito_array(data)
+        #data.diagnosticcode,
+        #data.replycode,
+        #data.token,
+
+        addresseralias = data.addresser.alias
+        addresseralias = data.addresser.to_s if addresseralias.empty?
+
+        now = Time.now
+        row = [
+          data.timestamp.to_time.utc,
+          data.lhost,
+          data.rhost,
+          data.alias,
+          data.listid,
+          data.reason,
+          data.action,
+          data.subject,
+          data.messageid,
+          data.smtpagent,
+          data.softbounce,
+          data.smtpcommand,
+          data.destination,
+          data.senderdomain,
+          data.feedbacktype,
+          "", # data.diagnostictype,
+          data.deliverystatus,
+          data.timezoneoffset,
+          data.addresser.to_json,
+          data.recipient.to_json,
+          addresseralias,
+          Digest::SHA1.hexdigest(data.recipient.to_s),
+          now,
+          now
+        ]
       end
     end
   end
